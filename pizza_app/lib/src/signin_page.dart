@@ -47,16 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fit: BoxFit.cover),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: 'Введите логин в виде 10 цифр номера телефона',
-                    style: TextStyle(fontSize: 26, color: MainColor),
-                  ),
-                ),
-              ),
+
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: TextFormField(

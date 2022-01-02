@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'src/signin_page.dart';
+import 'src/pizza.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const PizzaApp());
 }
 
 
