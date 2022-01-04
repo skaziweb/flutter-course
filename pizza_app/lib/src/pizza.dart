@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+
 
 import '_variables.dart';
 import 'constants.dart';
+import 'classes.dart';
 
 class PizzaApp extends StatelessWidget {
   const PizzaApp({Key? key}) : super(key: key);
@@ -31,48 +32,18 @@ class PizzaAppHomePage extends StatefulWidget {
   State<PizzaAppHomePage> createState() => _PizzaAppHomePageState();
 }
 
+final textStyle = GoogleFonts.inter(
+    textStyle: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 19,
+        color: Colors.black,
+        letterSpacing: 1
+    )
+);
+
 class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
 
-  num cost = 0;
-
-  void updateCost () {
-    num baseCost = 200;
-    num doughCost = 0.5;
-    num sizeCost = 1;
-    num sauceCost = 1;
-
-    if (selectedDough == 0) {
-      doughCost = 0.5;
-    } else {
-      doughCost = 1;
-    }
-
-    if (selectedSize == 0) {
-      sizeCost = 1;
-    } else if (selectedSize == 1) {
-      sizeCost = 1.5;
-    } else {
-      sizeCost = 1.75;
-    }
-
-    if (_selectedSauce == SaucesEnum.spicy) {
-      sauceCost = 1;
-    } else if (_selectedSauce == SaucesEnum.sourSweet) {
-      sizeCost = 1.5;
-    } else {
-      sizeCost = 1.75;
-    }
-
-    setState(() => {
-      cost = baseCost * doughCost * sizeCost * sauceCost
-    });
-  }
-
-
-
-  SaucesEnum? _selectedSauce = SaucesEnum.spicy ;
-  int selectedDough = 0;
-  int selectedSize = 0;
+  PizzaCalculator pizza = PizzaCalculator(100, 0, 0, SaucesEnum.spicy , true);
 
   final borderStyles =
       const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16)));
@@ -81,6 +52,7 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+        backgroundColor: Colors.orange,
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -117,14 +89,7 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   text: 'Выберите параметры:',
-                  style: GoogleFonts.inter(
-                      textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 19,
-                          color: Colors.black,
-                          letterSpacing: 1
-                      )
-                  ),
+                  style: textStyle
                 ),
               ),
               Padding(
@@ -134,18 +99,17 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
                   cornerRadius: 20.0,
                   activeBgColors: [[Colors.orangeAccent], [Colors.orangeAccent]],
                   activeFgColor: Colors.black,
-                  inactiveBgColor: Colors.grey,
+                  inactiveBgColor: Colors.blueGrey,
                   inactiveFgColor: Colors.white,
-                  initialLabelIndex: selectedDough,
+                  initialLabelIndex: pizza.selectedDough,
                   totalSwitches: 2,
                   animate: true,
                   labels: ['Обычное тесто', 'Тонкое тесто'],
                   radiusStyle: true,
                   onToggle: (index) {
                     setState(() {
-                      selectedDough = index;
+                      pizza.selectedDough = index;
                     });
-                    updateCost();
                   },
                 ),
               ),
@@ -155,16 +119,15 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
                   minWidth: 280.0,
                   activeBgColors: [[Colors.green], [Colors.yellow], [Colors.red]],
                   activeFgColor: Colors.black,
-                  inactiveBgColor: Colors.grey,
+                  inactiveBgColor: Colors.blueGrey,
                   inactiveFgColor: Colors.white,
-                  initialLabelIndex: selectedSize,
+                  initialLabelIndex: pizza.selectedSize,
                   totalSwitches: 3,
                   labels: ['Маленькая', 'Средняя', 'Большая'],
                   onToggle: (index) {
                     setState(() {
-                      selectedSize = index;
+                      pizza.selectedSize = index;
                     });
-                    updateCost();
                   },
                 ),
               ),
@@ -176,14 +139,7 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
                       textAlign: TextAlign.left,
                       text: TextSpan(
                         text: 'Соус:',
-                        style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 19,
-                                color: Colors.black,
-                                letterSpacing: 1
-                            )
-                        ),
+                        style: textStyle
                       ),
                     ),
                   ),
@@ -193,41 +149,91 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
                 children: [
                   RadioListTile(
                     title: const Text('Острый'),
-                    groupValue: _selectedSauce,
+                    groupValue: pizza.selectedSauce,
                     value: SaucesEnum.spicy,
-                    activeColor: Colors.orangeAccent,
+                    activeColor: Colors.yellow,
                     controlAffinity: ListTileControlAffinity.trailing,
                     onChanged: (SaucesEnum? value) => {
                       setState(() => {
-                        _selectedSauce = value
+                        pizza.selectedSauce = value
                       })
                     },
                   ),
                   RadioListTile(
                     title: const Text('Кисло-сладкий'),
-                    groupValue: _selectedSauce,
+                    groupValue: pizza.selectedSauce,
                     value: SaucesEnum.sourSweet,
-                    activeColor: Colors.orangeAccent,
+                    activeColor: Colors.yellow,
                     controlAffinity: ListTileControlAffinity.trailing,
                     onChanged: (SaucesEnum? value) => {
                       setState(() => {
-                        _selectedSauce = value
+                        pizza.selectedSauce = value
                       })
                     },
                   ),
                   RadioListTile(
                     title: const Text('Сырный'),
-                    groupValue: _selectedSauce,
+                    groupValue: pizza.selectedSauce,
                     value: SaucesEnum.cheese,
-                    activeColor: Colors.orangeAccent,
+                    activeColor: Colors.yellow,
                     controlAffinity: ListTileControlAffinity.trailing,
                     onChanged: (SaucesEnum? value) => {
                       setState(() => {
-                        _selectedSauce = value
+                        pizza.selectedSauce = value
                       })
                     },
                   ),
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: pizza.doubleCheese ? Colors.yellow : Colors.deepOrangeAccent,
+                          width: 2,
+                      ),
+                    color: Colors.orangeAccent,
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(16)
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Image(
+                          image: AssetImage('assets/img/cheese.png'),
+                          color: Colors.black,
+                        ),
+                        RichText(
+                          textAlign: TextAlign.left,
+                          text: TextSpan(
+                              text: 'Сырный борт',
+                              style: GoogleFonts.inter(
+                                  textStyle: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  )
+                              )
+                          ),
+                        ),
+                        Switch(
+                            value: pizza.doubleCheese,
+                            activeColor: Colors.yellowAccent,
+                            inactiveThumbColor: Colors.deepOrangeAccent,
+                            onChanged: (value) => {
+                              setState(() => {
+                                pizza.doubleCheese = !pizza.doubleCheese
+                              })
+                            }
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ),
               Row(
                 children: [
@@ -237,14 +243,7 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
                       textAlign: TextAlign.left,
                       text: TextSpan(
                         text: 'Стоимость:',
-                        style: GoogleFonts.inter(
-                            textStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 19,
-                                color: Colors.black,
-                                letterSpacing: 1
-                            )
-                        ),
+                        style: textStyle
                       ),
                     ),
                   ),
@@ -253,17 +252,54 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
               RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: cost.toString(),
-                style: GoogleFonts.inter(
-                    textStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 19,
-                        color: Colors.black,
-                        letterSpacing: 1
-                    )
-                ),
+                text: pizza.updateCost(),
+                style: textStyle
               ),
             ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: OutlinedButton(
+                      style: ButtonStyle(
+                        foregroundColor: MaterialStateProperty.all<Color>(Colors.yellow),
+                      ),
+                      child: RichText(
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                            text: 'Сделать заказ',
+                            style: textStyle
+                        ),
+                    ),
+                      onPressed: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          backgroundColor: Colors.deepOrangeAccent,
+                          title: const Text('Подтвердите заказ:'),
+                          content: pizza.orderInfo(),
+                          actions: <Widget>[
+                            TextButton(
+                              style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                              ),
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Отменить'),
+                            ),
+                            TextButton(
+                              style: ButtonStyle(
+                                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                              ),
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('Заказать'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ),
+                ],
+              ),
             ],
           ),
         ),
