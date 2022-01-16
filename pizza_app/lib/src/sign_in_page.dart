@@ -1,21 +1,4 @@
 import 'package:flutter/material.dart';
-import '_variables.dart';
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -33,6 +16,16 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Signup Page'),
+            leading: IconButton(
+                icon: const Icon(Icons.navigate_before_outlined),
+                tooltip: 'Go back to calculator',
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+          ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

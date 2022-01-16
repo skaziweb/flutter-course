@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pizza.dart';
 
 import './constants.dart';
+import 'styles.dart';
 
 class PizzaCalculator {
 
