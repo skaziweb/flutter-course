@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pizza_app/src/third_screen.dart';
 
 import 'sign_in_page.dart';
 import 'calculator.dart';
@@ -21,7 +22,8 @@ class PizzaApp extends StatelessWidget {
       routes: {
         '/': (context) => const PizzaAppHomePage(title: 'Pizza calculator'),
         '/signin': (context) => const MyHomePage(title: 'Sign in page'),
-      } ,
+        '/about': (context) => const ThirdPage(),
+      },
     );
   }
 }

@@ -14,9 +14,18 @@ class PizzaAppHomePage extends StatefulWidget {
   State<PizzaAppHomePage> createState() => _PizzaAppHomePageState();
 }
 
+final Devider = Divider(
+  height: 3,
+  thickness: 1,
+  indent: 20,
+  endIndent: 20,
+  color: Colors.black,
+);
+
 class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
 
   PizzaCalculator pizza = PizzaCalculator(100, 0, 0, SaucesEnum.spicy , true);
+  int _selectedIndex = 0;
 
   final borderStyles =
   const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16)));
@@ -25,6 +34,29 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
     setState(() {
       pizza.selectedSauce = value;
     });
+  }
+
+  void _onItemTapped(int index) {
+
+    if (_selectedIndex != index) {
+      setState(() {
+        _selectedIndex = index;
+      });
+      switch (_selectedIndex) {
+        case 0:
+          Navigator.pushNamed(context, '/');
+          break;
+        case 1:
+          Navigator.pushNamed(context, '/signin');
+          break;
+        case 2:
+          Navigator.pushNamed(context, '/about');
+          break;
+        default:
+          break;
+      }
+    }
+
   }
 
   @override
@@ -38,19 +70,36 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
                   decoration: BoxDecoration(
                     color: Colors.orange,
                   ),
-                  child: Text('App menu'),
+                  child: Text('Pizza Calculator Menu'),
                 ),
-                ListTile(
-                  title: const Text('Pizza Calculaton'),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/');
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: ListTile(
+                    title: const Text('Calculator'),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/');
+                    },
+                  ),
                 ),
-                ListTile(
-                  title: const Text('Sign in page'),
-                  onTap: () {
-                    Navigator.pushNamed(context, '/signin');
-                  },
+                Devider,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: ListTile(
+                    title: const Text('Sign in'),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/signin');
+                    },
+                  ),
+                ),
+                Devider,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: ListTile(
+                    title: const Text('About application'),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/about');
+                    },
+                  ),
                 ),
               ]
           )
@@ -73,19 +122,18 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
                   const SnackBar(content: Text('This is a snackbar')));
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.navigate_next),
-            tooltip: 'Go to the next page',
+          ElevatedButton(
+            child: const Text('>'),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute<void>(
                 builder: (BuildContext context) {
                   return Scaffold(
                     appBar: AppBar(
-                      title: const Text('Next page'),
+                      title: const Text('Page with text button'),
                     ),
                     body: const Center(
                       child: Text(
-                        'This is the next page',
+                        'Third test screen',
                         style: TextStyle(fontSize: 24),
                       ),
                     ),
@@ -95,6 +143,25 @@ class _PizzaAppHomePageState extends State<PizzaAppHomePage> {
             },
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calculate_outlined),
+            label: 'Calculator',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_outlined),
+            label: 'Sign In',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info_outline),
+            label: 'About',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.orangeAccent,
+        onTap: _onItemTapped,
       ),
       backgroundColor: Colors.orange,
       body: SingleChildScrollView(
