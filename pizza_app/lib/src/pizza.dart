@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pizza_app/helpers/pizzaTheme.dart';
 import 'package:pizza_app/src/third_screen.dart';
 
 import 'sign_in_page.dart';
@@ -12,12 +13,7 @@ class PizzaApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Pizza app',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-      ),
-      darkTheme: ThemeData(
-        primarySwatch: Colors.red,
-      ),
+      theme: PizzaTheme(),
       initialRoute:  '/',
       routes: {
         '/': (context) => const PizzaAppHomePage(title: 'Pizza calculator'),
