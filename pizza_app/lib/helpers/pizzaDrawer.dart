@@ -47,6 +47,16 @@ final PizzaAppDrawer = (context, widget) => Drawer(
               },
             ),
           ),
+          Devider,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: ListTile(
+              title: const Text('Users List'),
+              onTap: () {
+                Navigator.pushNamed(context, '/users');
+              },
+            ),
+          ),
         ]
     )
 ) as Widget;

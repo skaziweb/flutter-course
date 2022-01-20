@@ -6,9 +6,9 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../helpers/pizzaAppBar.dart';
 import '../helpers/pizzaDrawer.dart';
 import '../helpers/pizzaBottomBar.dart';
-import 'classes.dart';
-import 'constants.dart';
-import 'styles.dart';
+import '../classes/classes.dart';
+import '../classes/constants.dart';
+import '../style/styles.dart';
 
 class PizzaAppHomePage extends StatefulWidget {
   const PizzaAppHomePage({Key? key, required this.title}) : super(key: key);
