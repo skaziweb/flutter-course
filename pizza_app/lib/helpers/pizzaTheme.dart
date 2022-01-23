@@ -24,6 +24,17 @@ final PizzaTheme = () => ThemeData(
         color: Colors.blueGrey,
         letterSpacing: 1
     ),
+    headline5: const TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+        color: Colors.orangeAccent,
+    ),
+    headline6: const TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+        color: Colors.blueGrey,
+        letterSpacing: 1
+    ),
   ),
   snackBarTheme: SnackBarThemeData(
     backgroundColor: Colors.redAccent,

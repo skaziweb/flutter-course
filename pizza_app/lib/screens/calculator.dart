@@ -6,7 +6,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../helpers/pizzaAppBar.dart';
 import '../helpers/pizzaDrawer.dart';
 import '../helpers/pizzaBottomBar.dart';
-import '../classes/classes.dart';
+import '../classes/PizzaCalculator.dart';
 import '../classes/constants.dart';
 import '../style/styles.dart';
 
