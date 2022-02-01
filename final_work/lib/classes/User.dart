@@ -1,7 +1,7 @@
 import 'package:final_work/classes/Address.dart';
 import 'Company.dart';
 
-class Users {
+class User {
   final int id;
   final String name;
   final String username;
@@ -11,7 +11,7 @@ class Users {
   final Company company;
   final Address address;
 
-  const Users({
+  const User({
     required this.id,
     required this.name,
     required this.username,
@@ -22,8 +22,8 @@ class Users {
     required this.address
   });
 
-  factory Users.fromJson(Map<String, dynamic> json) {
-    return Users(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
         id: json['id'],
         name: json['name'],
         username: json['username'],
@@ -34,7 +34,4 @@ class Users {
         address: Address.fromJson(json['address'])
     );
   }
-
-
-
 }

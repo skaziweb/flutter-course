@@ -1,3 +1,5 @@
+import 'package:final_work/screens/about.dart';
+import 'package:final_work/screens/users_info.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_work/screens/users_list.dart';
@@ -17,7 +19,9 @@ class MyApp extends StatelessWidget {
       initialRoute:  '/',
       routes: {
         '/': (context) => const AuthorizationPage(title: 'Authorization Page',),
-        '/users': (context) => const UsersListPage(title: 'User List',),
+        '/users': (context) => const UsersListPage(title: 'Users List',),
+        '/info': (context) => const UsersInfoPage(title: 'User info',),
+        '/about': (context) => const AboutPage(title: 'About app',),
       },
     );
   }

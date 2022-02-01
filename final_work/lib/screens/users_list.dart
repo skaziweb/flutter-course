@@ -1,7 +1,11 @@
-import 'package:final_work/classes/Users.dart';
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import 'package:final_work/classes/User.dart';
+import 'package:final_work/helpers/AppBar.dart';
+import 'package:final_work/helpers/DrawerMenu.dart';
 
 class UsersListPage extends StatefulWidget {
   const UsersListPage({Key? key, required this.title}) : super(key: key);
@@ -12,17 +16,17 @@ class UsersListPage extends StatefulWidget {
   State<UsersListPage> createState() => _UsersListPageState();
 }
 
-Future<List<Users>> fetchUsers() async {
+Future<List<User>> fetchUsers() async {
   final response = await http
       .get(Uri.parse('https://jsonplaceholder.typicode.com/users'));
 
   if (response.statusCode == 200) {
     final List data = jsonDecode(response.body);
-    final List<Users> usersList = [];
+    final List<User> usersList = [];
     for (var user in data) {
-        usersList.add(Users.fromJson(user));
+      User temp = User.fromJson(user);
+      usersList.add(temp);
     }
-    print(usersList);
     return usersList;
   } else {
     throw Exception('Failed to load album');
@@ -31,39 +35,62 @@ Future<List<Users>> fetchUsers() async {
 
 class _UsersListPageState extends State<UsersListPage> {
 
-  late Future<Users> usersList;
+  late Future<List<User>> usersList;
 
   @override
   void initState() {
     super.initState();
-    fetchUsers();
+    usersList = fetchUsers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      appBar: UserAppBar(context, widget),
+      drawer: UserAppDrawer(context, widget),
+      body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0,40,0,0),
-                    child: FlutterLogo(size: 80),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32.0),
-                    child: ElevatedButton(
-                      onPressed: fetchUsers,
-                      child: const Text('Load data'),
+            FutureBuilder(
+                future: usersList,
+                builder: (context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    List<User> users = snapshot.data;
+                    return Expanded(
+                      child: ListView.builder(
+                          itemBuilder: (context, i) {
+                            User user = users[i];
+                            return ListTile(
+                              trailing: const Icon(Icons.supervised_user_circle_outlined),
+                              title: Text(user.name),
+                              subtitle: Text(user.email),
+                              leading: Text(
+                                user.id.toString(),
+                                style: const TextStyle(fontSize: 22),
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(context, '/info', arguments: {'user': user},);
+                              },
+                            );
+                          },
+                          itemCount: 10,
+                      ),
+                    );
+                  }
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 0),
+                      child: SizedBox(
+                        width: 80,
+                        height: 80,
+                        child: CircularProgressIndicator()
+                        ),
                     ),
-                  ),
-                ]),
+                  );
+                },
+              ),
           ],
         ),
-      ),
     );
   }
 }
