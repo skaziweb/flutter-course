@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'screens/authorization_form.dart';
+import 'package:final_work/screens/users_list.dart';
+import 'package:final_work/screens/authorization_form.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       initialRoute:  '/',
       routes: {
         '/': (context) => const AuthorizationPage(title: 'Authorization Page',),
-        '/users': (context) => const AuthorizationPage(title: 'User List',),
+        '/users': (context) => const UsersListPage(title: 'User List',),
       },
     );
   }

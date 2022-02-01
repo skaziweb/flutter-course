@@ -35,7 +35,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
     }
 
     if (_phone == user['phone'] && _password == user['password']) {
-      print('Go to users list');
+      Navigator.pushNamed(context, '/users');
       return;
     }
 
