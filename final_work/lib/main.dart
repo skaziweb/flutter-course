@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/authorization.dart';
+import 'screens/authorization_form.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -13,7 +13,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AuthorizationPage(title: 'Graduation project'),
+      initialRoute:  '/',
+      routes: {
+        '/': (context) => const AuthorizationPage(title: 'Authorization Page',),
+        '/users': (context) => const AuthorizationPage(title: 'User List',),
+      },
     );
   }
 }

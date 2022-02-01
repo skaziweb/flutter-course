@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/user.dart';
 
 class AuthorizationPage extends StatefulWidget {
   const AuthorizationPage({Key? key, required this.title}) : super(key: key);
@@ -12,13 +13,9 @@ class AuthorizationPage extends StatefulWidget {
 class _AuthorizationPageState extends State<AuthorizationPage> {
 
   String _password = '';
-  String _phone = '+';
-  bool _isErrorHandled = false;
+  String _phone = '';
 
-  final user = {
-    "phone": "+789123456789",
-    "password": "qwerty12345"
-  };
+  final _formKey = GlobalKey<FormState>();
 
   void setPassword (value) => {
     setState(() {
@@ -32,51 +29,57 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
     })
   };
 
-  bool checkAuth () {
-    if (_phone == user['phone'] && _password == user['password']) {
-      return false;
+  void checkAuth () {
+    if (!_formKey.currentState!.validate()) {
+      return;
     }
 
-    return true;
-  }
+    if (_phone == user['phone'] && _password == user['password']) {
+      print('Go to users list');
+      return;
+    }
 
-  void signIn () => {
-    setState(() {
-        _isErrorHandled = checkAuth();
-    })
-  };
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Указанный пользователь не найден!')),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 200,
-                      height: 50,
-                      child: _isErrorHandled == true ? const Text(
-                          'Неверный номер телефона или пароль',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.redAccent,
-                            fontWeight: FontWeight.normal),
-                      ) : const Text(''),
-                    ),
-                  ]),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
+    return Scaffold(
+      body: Form (
+      key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0,40,0,0),
+                        child: FlutterLogo(size: 150),
+                      )
+                    ]),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                  child: TextFormField(
                     keyboardType: TextInputType.phone,
                     onChanged: setPhone,
                     textInputAction: TextInputAction.next,
-                    initialValue: _password,
+                    initialValue: _phone,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Введите номер телефона';
+                      }
+                      if (!value.contains('+')) {
+                        return 'Номер должен начиная с +7';
+                      }
+                      if (value.length < 13) {
+                        return 'Введен короткий номер, (+789123456789)';
+                      }
+                      return null;
+                    },
                     decoration: const InputDecoration(
                       labelText: 'Введите номер телефона',
                       prefixIcon: Icon(Icons.phone),
@@ -87,47 +90,47 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                         borderSide: BorderSide(color: Color.fromRGBO(173, 183, 192, 1)),
                       ),
                     ),
+                  ),
                 ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.visiblePassword,
-                  onChanged: setPassword,
-                  textInputAction: TextInputAction.next,
-                  initialValue: _password,
-                  decoration: const InputDecoration(
-                    labelText: 'Введите пароль',
-                    prefixIcon: Icon(Icons.remove_red_eye_outlined),
-                    labelStyle: TextStyle(
-                        color: Color.fromRGBO(173, 183, 192, 1),
-                        fontWeight: FontWeight.bold),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Color.fromRGBO(173, 183, 192, 1)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                  child: TextFormField(
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.next,
+                    onChanged: setPassword,
+                    initialValue: _password,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Введите пароль';
+                      }
+                      if (value.length < 8) {
+                        return 'Введен короткий пароль, qwerty12345';
+                      }
+                      return null;
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Введите пароль',
+                      prefixIcon: Icon(Icons.remove_red_eye_outlined),
+                      labelStyle: TextStyle(
+                          color: Color.fromRGBO(173, 183, 192, 1),
+                          fontWeight: FontWeight.bold),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color.fromRGBO(173, 183, 192, 1)),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                  SizedBox(
-                    width: 200,
-                    height: 50,
-                    child: ElevatedButton(
-                      child: const Text('Войти'),
-                      onPressed: signIn,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32.0),
+                  child: ElevatedButton(
+                    onPressed: checkAuth,
+                    child: const Text('Войти'),
                   ),
-                ]),
-              )
-            ],
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
